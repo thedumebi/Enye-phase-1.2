@@ -1,0 +1,470 @@
+---
+openapi: 3.0.0
+info:
+  title: Enye Phase 3
+  description: This is the API for Enye trade and barter web application
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/TheDaniel/Enye/1.0.0
+  description: SwaggerHub API Auto Mocking
+paths:
+  /farmers:
+    get:
+      description: Returns a list of farmers
+      responses:
+        "200":
+          description: Successfully returned a list of farmers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Farmer'
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+    post:
+      description: Adds a new farmer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Farmer'
+        required: true
+      responses:
+        "200":
+          description: Successfully created a new Farmer
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+        "409":
+          description: A farmer with that username already exists
+  /farmers/{username}:
+    get:
+      description: Get information about a farmer from his or her unique username
+      parameters:
+      - name: username
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successfully returned a farmer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Farmer'
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+  /farmers/{username}/items:
+    get:
+      description: returns a list of all the items under the farmer from his unique username
+      parameters:
+      - name: username
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successfully returned a list of all items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Item'
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+    post:
+      description: Lets a farmer add a new item
+      parameters:
+      - name: username
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Item'
+        required: true
+      responses:
+        "200":
+          description: Successfully added a new item
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+    patch:
+      description: Lets a farmer edit an item
+      parameters:
+      - name: username
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Item'
+        required: true
+      responses:
+        "200":
+          description: Successfully updated an item
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+  /farmers/{username}/requests/recieved:
+    get:
+      description: returns a list of all requests the farmer has to approve/ reject
+      parameters:
+      - name: username
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successfully returned a list of all the request the farmer has received
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Request'
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+  /farmers/{username}/requests/received/{requestId}:
+    get:
+      description: Get information about a particular request from its ID
+      parameters:
+      - name: username
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: requestId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: number
+      responses:
+        "200":
+          description: Successfully returned a request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Request'
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+    patch:
+      description: Lets the farmer update a request i.e. approve or reject
+      parameters:
+      - name: username
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: requestId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: number
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Request'
+        required: true
+      responses:
+        "200":
+          description: Successfully updated a request
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+  /farmers/{username}/requests/sent:
+    get:
+      description: returns a list of all requests the farmer has sent
+      parameters:
+      - name: username
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successfully returned a list of all the request the farmer has sent
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Request'
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+  /farmers/{username}/requests/sent/{requestId}:
+    get:
+      description: Get information about a particular request from its ID
+      parameters:
+      - name: username
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: requestId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: number
+      responses:
+        "200":
+          description: Successfully returned a request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Request'
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+    patch:
+      description: Lets the farmer update a request e.g. change the quantity of items requested for
+      parameters:
+      - name: username
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: requestId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: number
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Request'
+        required: true
+      responses:
+        "200":
+          description: Successfully updated a request
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+  /items:
+    get:
+      description: returns a list of all the items
+      responses:
+        "200":
+          description: Successfully returned a list of all items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Item'
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+  /items/{itemId}:
+    get:
+      description: Get information about a particular item from its ID
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: number
+      responses:
+        "200":
+          description: Successfully returned an item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+  /items/{itemId}/request:
+    post:
+      description: Lets a farmer request an exchange
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: number
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Request'
+        required: true
+      responses:
+        "200":
+          description: Successfully made a request
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+components:
+  schemas:
+    Farmer:
+      required:
+      - id
+      - username
+      type: object
+      properties:
+        id:
+          type: number
+        username:
+          type: string
+        phone:
+          type: string
+        name:
+          type: string
+        incoming_requests:
+          type: array
+          items:
+            $ref: '#/components/schemas/Request'
+        outgoing_requests:
+          type: array
+          items:
+            $ref: '#/components/schemas/Request'
+        created_at:
+          type: string
+          format: date-time
+    Item:
+      required:
+      - id
+      - name
+      - owner
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        owner:
+          $ref: '#/components/schemas/Farmer'
+    Request:
+      required:
+      - id
+      - item1Id
+      - item1Owner
+      - item1Quantity
+      - item2Id
+      - item2Owner
+      - item2Quantity
+      type: object
+      properties:
+        id:
+          type: number
+        item1Id:
+          type: number
+        item1Quantity:
+          type: number
+        item1OwnerId:
+          type: number
+        item2Id:
+          type: number
+        item2Quantity:
+          type: number
+        item2OwnerId:
+          type: number
+    inline_response_400:
+      type: object
+      properties:
+        message:
+          type: string
+  responses:
+    "400Error":
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_response_400'
